@@ -1,0 +1,27 @@
+%% input start and target positions here
+gstart = [0 -1 0 0.47;
+          0 0 1 0.55;
+          -1 0 0 0.12;
+          0 0 0 1];
+gtarget = [0 -1 0 -0.30;
+           0 0 1 0.39;
+           -1 0 0 0.12;
+           0 0 0 1];
+ur5 = ur5_interface();
+
+%% move to the home configuration
+home = [0.6; -2; 1; -1.5; -1;1];
+ur5.move_joints(home,5);
+
+
+%% move and place task
+% choose the method for control trajectory: 1 = IK-based, 2 = DK-based, 3 = gradient-based
+mode = 2;
+
+% perform the task
+if mode == 1
+   result = ur5InvMovePlace(gstart,gtarget);
+elseif mode == 2
+   result = InverseRRControl(gstart,gtarget,ur5);
+elseif mode == 3
+end 

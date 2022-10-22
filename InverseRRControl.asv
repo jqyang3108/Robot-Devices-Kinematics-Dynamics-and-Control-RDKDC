@@ -1,0 +1,52 @@
+%% Final Project ResolvedRate Control Inverse Jacobian
+function Return = InverseRRControl(X,Y,ur5)
+
+% Input X: Homogeneous start location
+% Input Y: Homogeneous target location
+% OutputAns: Returns 1 if succesful, returns 0 if not.
+
+% Checking if input is good or not
+
+
+dist = 0.3;
+
+K = 10;
+gdesired = X + [0 0 0 0; 0 0 0 0; 0 0 0 dist; 0 0 0 0];
+fwdKinToolFrame = tf_frame("base_link","fwdKinToolFrame",gdesired);
+% Moving above start location
+ur5RRcontrol(gdesired, K, ur5)
+display('Moved above start location');
+pause;
+
+%% 
+
+% Moving down to start location
+ur5RRcontrol(X, K, ur5)
+Startarget = tf_frame("base_link","Starttarget",X);
+display('Moved to start location');
+pause;
+%%
+
+% Moving above start location
+ur5RRcontrol(gdesired, K, ur5)
+display('Moved above start location');
+pause;
+%%
+
+gtarget = Y + [0 0 0 0; 0 0 0 0; 0 0 0 dist; 0 0 0 0];
+% Moving over to above target location
+ur5RRcontrol(gtarget, K, ur5)
+display('Moved above target location');
+pause;
+
+% Moving target location
+ur5RRcontrol(Y, K, ur5)
+display('Moved to target location');
+pause;
+
+% Moving over to above target location
+ur5RRcontrol(gtarget, K, ur5)
+display('Moved above target location');
+pause
+
+Return = 1;
